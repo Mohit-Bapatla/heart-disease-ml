@@ -6,3 +6,4 @@ seaborn==0.13.2
 jupyter==1.1.1
 joblib==1.5.3
 shap==0.51.0
+streamlit==1.57.0

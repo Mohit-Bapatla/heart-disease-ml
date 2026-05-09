@@ -17,6 +17,7 @@ The goal is to build a practical heart disease risk-screening model that can:
 - Compare interpretable baseline and tree-based models
 - Evaluate performance beyond accuracy
 - Explain which features influence predictions
+- Provide a polished Streamlit dashboard for interactive risk estimation
 - Discuss healthcare deployment risks responsibly
 
 This is not a diagnostic system. It is a machine learning demonstration showing how a model could support risk prioritization with clinical oversight.
@@ -100,6 +101,24 @@ Recall is especially important in this healthcare framing because a false negati
 
 ![SHAP Summary](outputs/shap_summary.png)
 
+## Streamlit App
+
+The project includes a polished Streamlit app that feels like a lightweight clinical dashboard.
+
+The app provides:
+
+- Patient feature inputs grouped by clinical category
+- Tuned model risk prediction
+- Risk score with color-coded interpretation
+- Simple feature-level explanation
+- Clear educational disclaimer
+
+Run it locally with:
+
+```powershell
+streamlit run app.py
+```
+
 ## ROC-AUC Discussion
 
 ROC curves compare true positive rate against false positive rate across multiple classification thresholds. ROC-AUC summarizes this curve into one score.
@@ -151,6 +170,7 @@ Healthcare ML systems require careful governance:
 - SHAP
 - Jupyter Notebook
 - joblib
+- Streamlit
 
 ## Folder Structure
 
@@ -162,6 +182,7 @@ heart-disease-ml/
 |   |-- roc_curve.png
 |   |-- shap_beeswarm.png
 |   `-- shap_summary.png
+|-- app.py
 |-- notebook.ipynb
 |-- train.py
 |-- model.pkl
@@ -196,6 +217,12 @@ Open the case-study notebook:
 jupyter notebook notebook.ipynb
 ```
 
+Launch the Streamlit dashboard:
+
+```powershell
+streamlit run app.py
+```
+
 Running `train.py` trains the models, performs evaluation, runs lightweight tuning, saves ROC/SHAP plots, and writes:
 
 ```text
@@ -212,7 +239,7 @@ outputs/shap_beeswarm.png
 - Add fairness evaluation across demographic groups
 - Calibrate predicted probabilities
 - Add confidence intervals for metrics
-- Build a small Streamlit demo for interactive risk exploration
+- Add deployment-ready logging and input validation around the Streamlit app
 - Add model monitoring examples for data drift
 
 ## Portfolio Note
