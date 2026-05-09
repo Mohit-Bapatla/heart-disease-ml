@@ -1,26 +1,40 @@
 # Interpretable Heart Disease Risk Prediction
 
-![Python](https://img.shields.io/badge/Python-3.12-blue)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange)
-![SHAP](https://img.shields.io/badge/Interpretability-SHAP-green)
-![Status](https://img.shields.io/badge/Status-Portfolio%20Ready-brightgreen)
+A deployed machine learning system that predicts heart disease risk and explains model decisions using SHAP.
 
-An interpretable machine learning project that predicts whether a patient shows evidence of heart disease from structured clinical measurements.
+![Python](https://img.shields.io/badge/Python-3.12-3776AB)
+![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Portfolio-2563EB)
+![Streamlit](https://img.shields.io/badge/Streamlit-Deployed-FF4B4B)
+![SHAP](https://img.shields.io/badge/SHAP-Interpretability-16A34A)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-Modeling-F7931E)
 
-This project is designed as a recruiter-friendly ML portfolio case study: clear problem framing, readable preprocessing, strong evaluation, model comparison, ROC-AUC analysis, SHAP interpretability, and real-world healthcare limitations.
+An end-to-end machine learning project that predicts whether a patient shows evidence of heart disease from structured clinical measurements, with a deployed Streamlit dashboard for real-time risk estimation.
+
+## Live Demo
+
+Try the deployed Streamlit dashboard here:
+
+https://heart-disease-ml-iynovw3aei45qpkn9jgzcv.streamlit.app
+
+## What This Project Demonstrates
+
+- End-to-end ML pipeline from raw data to deployment
+- Model comparison using ROC-AUC, recall, precision, and F1
+- Hyperparameter tuning with `GridSearchCV`
+- SHAP-based model interpretability
+- Real-time predictions through a deployed Streamlit dashboard
 
 ## Overview
 
 The goal is to build a practical heart disease risk-screening model that can:
 
 - Predict whether heart disease is present
-- Compare interpretable baseline and tree-based models
+- Compare an interpretable baseline against a nonlinear model
 - Evaluate performance beyond accuracy
 - Explain which features influence predictions
-- Provide a polished Streamlit dashboard for interactive risk estimation
 - Discuss healthcare deployment risks responsibly
 
-This is not a diagnostic system. It is a machine learning demonstration showing how a model could support risk prioritization with clinical oversight.
+This is not a diagnostic system. It is a machine learning demonstration showing how models can support risk prioritization with clinical oversight.
 
 ## Problem Statement
 
@@ -45,18 +59,15 @@ Project dataset shape:
 920 rows x 16 columns
 ```
 
-The `id` column is excluded because it is only an identifier. The `dataset` column is excluded from modeling because it represents data source/site rather than patient health information.
+The `id` column is excluded because it is only an identifier. The `dataset` column is excluded because it represents data source/site rather than patient health information.
 
 ## Models Used
 
-Two model families are used:
+- **Logistic Regression:** interpretable baseline with scaled numeric features
+- **Random Forest:** nonlinear model that captures interactions and supports feature importance
+- **Tuned Random Forest:** final model selected after lightweight `GridSearchCV`
 
-- **Logistic Regression**: interpretable baseline with scaled numeric features
-- **Random Forest**: nonlinear model that captures interactions and supports feature importance
-
-The final model is a lightweight tuned Random Forest using `GridSearchCV`.
-
-The workflow uses sklearn Pipelines for production-style preprocessing:
+The sklearn pipeline includes:
 
 - Median imputation for numeric features
 - Most-frequent imputation for categorical features
@@ -69,7 +80,7 @@ The workflow uses sklearn Pipelines for production-style preprocessing:
 Held-out test set performance:
 
 | Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
-|---|---:|---:|---:|---:|---:|
+| --- | ---: | ---: | ---: | ---: | ---: |
 | Logistic Regression | 0.842 | 0.841 | 0.882 | 0.861 | 0.902 |
 | Random Forest | 0.842 | 0.841 | 0.882 | 0.861 | 0.913 |
 | Tuned Random Forest | 0.848 | 0.849 | 0.882 | 0.865 | 0.915 |
@@ -85,11 +96,11 @@ n_estimators: 200
 5-fold cross-validation:
 
 | Model | Mean Accuracy | Mean Recall | Mean F1 |
-|---|---:|---:|---:|
+| --- | ---: | ---: | ---: |
 | Logistic Regression | 0.826 | 0.855 | 0.844 |
 | Random Forest | 0.823 | 0.857 | 0.842 |
 
-Recall is especially important in this healthcare framing because a false negative means a patient with possible heart disease may be missed.
+Recall is especially important in healthcare screening because a false negative means a patient with possible heart disease may be missed.
 
 ## Visual Examples
 
@@ -97,23 +108,32 @@ Recall is especially important in this healthcare framing because a false negati
 
 ![ROC Curve](outputs/roc_curve.png)
 
+The tuned Random Forest achieves the highest ROC-AUC at `0.915`, showing the strongest class separation on the held-out test set.
+
 ### SHAP Feature Summary
 
 ![SHAP Summary](outputs/shap_summary.png)
 
+SHAP highlights exercise-induced angina, ST depression, cholesterol, chest pain type, age, and maximum heart rate as major model drivers.
+
+## How to Use the App
+
+1. Open the live demo.
+2. Enter patient clinical features.
+3. Click **Predict Risk**.
+4. View the risk probability, classification, and feature-level explanation.
+
 ## Streamlit App
 
-The project includes a polished Streamlit app that feels like a lightweight clinical dashboard.
+The deployed app provides:
 
-The app provides:
-
-- Patient feature inputs grouped by clinical category
+- Patient inputs grouped by clinical category
 - Tuned model risk prediction
-- Risk score with color-coded interpretation
+- Color-coded risk interpretation
 - Simple feature-level explanation
-- Clear educational disclaimer
+- Educational medical disclaimer
 
-Run it locally with:
+Run it locally:
 
 ```powershell
 streamlit run app.py
@@ -123,7 +143,7 @@ streamlit run app.py
 
 ROC curves compare true positive rate against false positive rate across multiple classification thresholds. ROC-AUC summarizes this curve into one score.
 
-This matters in healthcare because the threshold may change depending on the workflow. A screening tool may prefer higher recall to catch more possible disease cases, while a follow-up testing workflow may prefer higher precision to reduce false alarms.
+This matters in healthcare because the threshold may change depending on the workflow. A screening tool may prefer higher recall to catch more possible disease cases, while a follow-up testing workflow may require higher precision to reduce false alarms.
 
 ## SHAP Interpretability
 
@@ -138,15 +158,15 @@ Top SHAP drivers in the tuned Random Forest include:
 - Age
 - Maximum heart rate
 
-Feature importance ranks what the model uses most. SHAP goes further by showing direction and magnitude of impact, which is valuable for healthcare AI transparency.
+Feature importance ranks what the model uses most. SHAP adds direction and magnitude, which is valuable for healthcare AI transparency.
 
 ## Key Insights
 
-- The strongest model signals are clinically interpretable and align with cardiovascular risk indicators.
-- Logistic Regression is a strong explainable baseline, while the tuned Random Forest slightly improves F1 and ROC-AUC.
-- ROC-AUC above 0.90 suggests strong class separation on this held-out split.
-- Threshold tuning is critical because lower thresholds improve recall but create more false positives.
-- SHAP makes the model easier to discuss with non-technical stakeholders.
+- Exercise-induced angina is the strongest model driver, aligning with cardiovascular stress patterns.
+- Recall is central for healthcare screening because missed high-risk cases can delay follow-up.
+- Logistic Regression provides a clear, interpretable baseline for interview discussion.
+- Random Forest adds predictive strength by capturing nonlinear feature interactions.
+- ROC-AUC above `0.90` across models indicates strong held-out class separation.
 
 ## Ethical Considerations
 
@@ -159,23 +179,30 @@ Healthcare ML systems require careful governance:
 - **Privacy:** Patient data requires strict security and compliance controls.
 - **Clinical oversight:** ML should assist clinicians, not replace diagnosis.
 
-## Technologies Used
+## Limitations
+
+- The dataset is modest in size and combines records from multiple sources.
+- Several clinical fields contain missing values and require imputation.
+- Important variables such as medications, smoking history, and family history are absent.
+- Performance on this dataset does not guarantee real-world clinical generalization.
+
+## Tech Stack
 
 - Python
+- scikit-learn
 - pandas
 - NumPy
-- scikit-learn
+- SHAP
+- Streamlit
 - matplotlib
 - seaborn
-- SHAP
-- Jupyter Notebook
-- joblib
-- Streamlit
 
 ## Folder Structure
 
 ```text
 heart-disease-ml/
+|-- .streamlit/
+|   `-- config.toml
 |-- data/
 |   `-- heart_disease_uci.csv
 |-- outputs/
@@ -223,7 +250,7 @@ Launch the Streamlit dashboard:
 streamlit run app.py
 ```
 
-Running `train.py` trains the models, performs evaluation, runs lightweight tuning, saves ROC/SHAP plots, and writes:
+Running `train.py` trains the models, evaluates performance, runs lightweight tuning, saves ROC/SHAP plots, and writes:
 
 ```text
 model.pkl
@@ -242,6 +269,6 @@ outputs/shap_beeswarm.png
 - Add deployment-ready logging and input validation around the Streamlit app
 - Add model monitoring examples for data drift
 
-## Portfolio Note
+## Conclusion
 
-This project intentionally avoids deep learning. For this dataset size and tabular clinical structure, interpretable classical ML is more appropriate, easier to validate, and easier to explain in interviews.
+This project intentionally avoids deep learning because interpretable classical ML is more appropriate for this dataset size and tabular clinical structure. Early risk estimation systems can help prioritize screening workflows and reduce missed high-risk cases.
